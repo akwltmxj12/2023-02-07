@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<mapper namespace="com.sycompany.hsp.dao.JoinIDao">
+
+  <!-- 로그인 시 가입한 병원의 모든 정보 조회 -->
+  <select id="getHspInfo" resultType="com.sycompany.hsp.dto.HspInfoDto">
+   	SELECT * 
+   	 FROM hspinfo
+   		WHERE hspid=#{param1}
+  </select>
+
+
+	<!-- 아이디 중복 조회(가입하려는 의료기관 아이디 조회) -->
+	<select id="idCheck" resultType="int">
+		SELECT COUNT(*) 
+		  FROM HspInfo
+		 WHERE hspId = #{param1}
+	</select>
+  
+  <!-- 가입하려는 의료기관 정보 저장 -->
+  <insert id="setHspInfo">
+  	INSERT 
+  	INTO hspInfo
+  		(hspId, hspPw, hspEmail, 
+  		 hspName, hspKind, hspAddress, hspCrntAdd, hspTel, 
+  		 hspDrNum, hspNum, hspLunchSt, hspLunchCl, hspVaccineCk, rgstDate) 
+  	VALUES
+  		(#{param1},#{param2},#{param3},
+  		 #{param4},#{param5},#{param6},#{param7},#{param8},
+  		 #{param9},#{param10},#{param11},#{param12},#{param13},#{param14})
+  </insert>
+  
+  <!-- 가입하려는 병원의 운영시간 -->
+  <insert id="setHspDayTime">
+  	INSERT 
+  	INTO HspdayApp
+  		(hspId, hspName, 
+			hspStMon, hspClMon, hspStTue, hspClTue, 
+			hspStWed, hspClWed, hspStThu, hspClThu, 
+			hspStFri, hspClFri, hspStSat, hspClSat, 
+			hspStSun, hspClSun) 
+  	VALUES
+  		(#{param1},#{param2},
+  			#{param3},#{param4},#{param5},#{param6},
+  			#{param7},#{param8},#{param9},#{param10},
+  			#{param11},#{param12},#{param13},#{param14},
+  			#{param15},#{param16})
+  </insert>  
+
+</mapper>

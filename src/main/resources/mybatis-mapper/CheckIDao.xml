@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sycompany.hsp.dao.CheckIDao">
+
+   <!-- 로그인 시 가입한 병원의 모든 정보 조회 -->
+  <select id="getHspInfo" resultType="com.sycompany.hsp.dto.HspInfoDto">
+   	SELECT * 
+   	 FROM hspinfo
+   		WHERE hspid=#{param1}
+  </select>
+  
+  <!-- 모든 예방접종 후 리스트 조회 -->
+  <select id="allAppInfo" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+   	SELECT *  
+   		FROM appointmentinfo
+   	   WHERE 
+   	   		<![CDATA[
+   	   		appdate <= TO_DATE(#{param1},'YYYY-MM-DD')
+   	   		]]>
+   	   		AND
+   	   		<![CDATA[
+   	   		appdate >= TO_DATE(#{param2},'YYYY-MM-DD')
+   	   		]]>
+   	ORDER BY appDate ASC, apptime ASC
+  </select>	 
+
+  <!-- 7일 이내 부작용 발생 증상 작성-->
+  <update id="setSideEffect">
+	UPDATE APPOINTMENTINFO
+		SET rsTxt=#{param5}
+			WHERE mName = #{param1} 
+	 		  AND mJumin1=#{param2} 
+	 		  AND mJumin2=#{param3}
+	 		  AND vaccineName=#{param4}
+  </update>	
+  
+  <!-- 날짜 예방접종 후 리스트 조회 -->
+  <select id="dateCheckInfo" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE 
+		   		<![CDATA[
+		   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+		        ]]>
+		        AND
+	   	   		<![CDATA[
+	   	   		appdate >= TO_DATE(#{param3},'YYYY-MM-DD')
+	   	   		]]>
+	    ORDER BY appdate ASC, apptime ASC
+  </select>
+  
+  
+  <!-- 날짜 + 시간 예방접종 후 리스트 조회 -->
+  <select id="timeCheckInfo" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE 
+		   		<![CDATA[
+		   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+		        ]]>
+		     AND
+	   	   		<![CDATA[
+	   	   		appdate >= TO_DATE(#{param5},'YYYY-MM-DD')
+	   	   		]]>
+		     AND
+		        apptime BETWEEN #{param3} AND #{param4}
+	    ORDER BY appdate ASC, apptime ASC
+  </select>	 
+
+  <!-- 날짜+이름 예방접종 후 리스트 조회 -->
+  <select id="nameCheckInfo" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   WHERE
+	    	mName = #{param3}  
+	   	 AND
+	   		<![CDATA[
+	   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+	        ]]>
+	     AND
+   	   		<![CDATA[
+   	   		appdate >= TO_DATE(#{param4},'YYYY-MM-DD')
+   	   		]]>
+	    ORDER BY appdate ASC, apptime ASC
+  </select>
+
+
+  <!-- 날짜+이름+생년월일 예방접종 후 리스트 조회 -->
+  <select id="birthdayCheckInfo" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   WHERE
+	    	mJumin1 = #{param3}  
+	   	 AND
+	   		<![CDATA[
+	   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+	        ]]>
+	     AND
+   	   		<![CDATA[
+   	   		appdate >= TO_DATE(#{param4},'YYYY-MM-DD')
+   	   		]]>
+	    ORDER BY appdate ASC, apptime ASC
+  </select>
+
+
+  <!-- 날짜+이름+생년월일 예방접종 후 리스트 조회 -->
+  <select id="birthNameCheckInfo" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   WHERE
+	   		mName = #{param3}
+	   	 AND
+	    	mJumin1 = #{param4}  
+	   	 AND
+	   		<![CDATA[
+	   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+	        ]]>
+	     AND
+   	   		<![CDATA[
+   	   		appdate >= TO_DATE(#{param5},'YYYY-MM-DD')
+   	   		]]>
+	    ORDER BY appdate ASC, apptime ASC
+  </select>
+
+
+  <!-- 날짜 + 이름 + 주민번호 예방접종 후 리스트 조회 -->
+  <select id="CheckInfo" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   	WHERE 
+		   		<![CDATA[
+		   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+		        ]]>
+        	AND
+	   	   		<![CDATA[
+	   	   		appdate >= TO_DATE(#{param6},'YYYY-MM-DD')
+	   	   		]]>
+	        AND
+	        	apptime BETWEEN #{param3} AND #{param4}
+	        AND
+	        	mJumin1 = #{param5} AND mJumin2 = #{param5}
+	    ORDER BY appdate ASC, apptime ASC
+  </select>	 
+
+
+
+  <!-- 모든 예방접종 후 리스트 조회 -->
+  <select id="allCheckInfo" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE 
+			   		<![CDATA[
+			   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+			        ]]>
+		        AND
+		   	   		<![CDATA[
+		   	   		appdate >= TO_DATE(#{param8},'YYYY-MM-DD')
+		   	   		]]>
+		        AND
+		        	apptime BETWEEN #{param3} AND #{param4}
+		        AND
+		        	mName = #{param5}
+		        AND
+		        	mJumin1 = #{param6} AND mJumin2 = #{param7}
+	    ORDER BY appdate ASC, apptime ASC
+  </select>	 
+
+</mapper>

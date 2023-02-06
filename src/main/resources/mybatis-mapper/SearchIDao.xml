@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+ <mapper namespace="com.sycompany.hsp.dao.SearchIDao">
+ 
+	<!-- 로그인 시 가입한 병원의 모든 정보 조회 -->
+	<select id="getHspInfo" resultType="com.sycompany.hsp.dto.HspInfoDto">
+	 	SELECT * 
+	 	 FROM hspinfo
+	 		WHERE hspid=#{param1}
+	</select>
+	
+	<!-- 모든 예약 리스트 조회 -->
+	<select id="allAppInfo" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	 	SELECT *  
+	 		FROM appointmentinfo
+	 	   WHERE appdate >= TO_DATE(#{param1},'YYYY-MM-DD')
+	 	ORDER BY appDate ASC, apptime ASC
+	</select>	
+	
+	<!-- 예약 취소 -->	
+	<delete id="appDelete">
+		DELETE 
+		FROM APPOINTMENTINFO
+			WHERE mName = #{param1} 
+			  AND mJumin1=#{param2} 
+			  AND mJumin2=#{param3}
+	</delete>
+	
+	<!-- 예약확인 -->
+	 <update id="appCheckOk">
+		UPDATE APPOINTMENTINFO
+		SET appCk=#{param4}
+			WHERE mName = #{param1} 
+				  AND mJumin1=#{param2} 
+				  AND mJumin2=#{param3}
+	 </update>	
+ 
+ 
+ 
+ <!-- 조회 시작 -->
+ 	<!-- 원하는 기간 내 날짜 조회 -->
+	<select id="searchDate" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	   	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE 
+	   		<![CDATA[
+	   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+	        ]]>
+	        ORDER BY appdate ASC, apptime ASC
+	</select>
+	
+	<!-- 날짜 + 생년월일 조회 -->
+	<select id="searchDateBirth" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	   	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE 
+	   		<![CDATA[
+	   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+	        ]]>
+	        AND mJumin1 = #{param3}
+	        ORDER BY appdate ASC, apptime ASC
+	</select>
+	
+	<!-- 접종자명 조회 -->
+	<select id="searchInjecN" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	   	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE mName = #{param1}  
+         ORDER BY appdate ASC, apptime ASC
+	</select>
+	
+	<!-- 예약자명 + 생년월일 조회 -->
+	<select id="searchInjecNameBrith" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	   	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE mName= #{param1}  
+	   		  AND mJumin1 = #{param2}  
+         ORDER BY appdate ASC, apptime ASC
+	</select>
+	
+	
+	<!-- 검색기능 예약자명 + 주민번호 조회 -->
+	<select id="searchAppName" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	   	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE appName= #{param1}  
+	   		  AND mJumin1 = #{param2}  
+	   		  AND mJumin2 = #{param3} 
+         ORDER BY appdate ASC, apptime ASC
+	</select>
+ 
+ 	<!-- 검색기능 접종자명 + 주민번호 조회 -->
+	<select id="searchInjecName" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	   	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE mName= #{param1}  
+	   		  AND mJumin1 = #{param2}  
+	   		  AND mJumin2 = #{param3} 
+         ORDER BY appdate ASC, apptime ASC
+	</select>
+ 
+ 	<!-- 날짜 + 예약자명 + 주민번호 조회 -->
+	<select id="searchAppDateName" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	   	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE appName= #{param3}  
+	   		  AND mJumin1 = #{param4}  
+	   		  AND mJumin2 = #{param5}
+	   		  AND 
+		   		<![CDATA[
+		   		TO_DATE(appdate,'YYYY-MM-DD') >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+		        ]]>
+	        ORDER BY appdate ASC, apptime ASC
+	</select>
+	
+	<!-- 날짜 + 접종자명 + 주민번호 조회 -->
+	<select id="searchDateInjecName" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	   	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE mName= #{param3}  
+	   		  AND mJumin1 = #{param4}  
+	   		  AND mJumin2 = #{param5} 
+	   		  AND
+		   		<![CDATA[
+		   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+		        ]]>
+	        ORDER BY appdate ASC, apptime ASC
+	</select>
+ 
+ 	<!-- 날짜 + 예약자명 + 접종자명 + 주민번호 조회 -->
+	<select id="searchAppDateInjecName" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+	   	SELECT *  
+	   	FROM APPOINTMENTINFO
+	   		WHERE appName = #{param3} 
+	   		  AND mName= #{param4}  
+	   		  AND mJumin1 = #{param5}  
+	   		  AND mJumin2 = #{param6} 
+	   		  AND
+		   		<![CDATA[
+		   		TO_DATE(appdate,'YYYY-MM-DD')  >= TO_DATE(#{param1},'YYYY-MM-DD') AND TO_DATE(appdate,'YYYY-MM-DD') <= TO_DATE(#{param2},'YYYY-MM-DD')
+		        ]]>
+	        ORDER BY appdate ASC, apptime ASC
+	</select>
+ <!-- 조회 끝 -->
+ 
+ 
+ </mapper>

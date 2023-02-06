@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+ <mapper namespace="com.sycompany.hsp.dao.IDao">
+ 
+    <!-- 로그인 시 가입한 병원의 모든 정보 조회 -->
+  <select id="getHspInfo" resultType="com.sycompany.hsp.dto.HspInfoDto">
+   	SELECT * 
+   	 FROM hspinfo
+   		WHERE hspid=#{param1}
+  </select>
+ 
+   <!-- 더미데이터 등록 -->
+	<insert id="setInjectInfo">
+	  	INSERT 
+	  	INTO APPOINTMENTINFO
+	  		(appDate, appTime, appName, appTel, 
+			 mName, mTel, mJumin1, mJumin2, 
+			 injecNum, vaccineName, appRoute, 
+			 appMemo, lastInjecDate, lastInjecName, lastInjec, 
+			 sideEffect, appCk) 
+	  	VALUES
+	  		(#{param1},#{param2},#{param3},#{param4},
+	  		#{param5},#{param6},#{param7},#{param8},
+	  		#{param9},#{param10},#{param11},#{param12},
+	  		#{param13},#{param14},#{param15},#{param16},
+	  		#{param17})
+	</insert>
+    
+
+	<select id="getVaccineName" resultType="String">
+		SELECT REGEXP_SUBSTR(a.langList, '[^>]+', 1, LEVEL) AS split_result
+			FROM 
+				(SELECT hspVaccineCk AS langList 
+				FROM HspInfo WHERE hspinfo.hspid= #{param1}) a
+			CONNECT BY LEVEL <![CDATA[<=]]> 
+			LENGTH(REGEXP_REPLACE(a.langList, '[^>]+',''))+1
+	</select>
+  
+ 
+	<select id="allAppInfo" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+			SELECT *  
+		   		FROM appointmentinfo
+		   	   WHERE 
+		   	   		<![CDATA[
+		   	   		appdate <= TO_DATE(#{param1},'YYYY-MM-DD')
+		   	   		]]>
+		   	ORDER BY appDate ASC, apptime ASC
+	</select>
+  
+  
+ </mapper>

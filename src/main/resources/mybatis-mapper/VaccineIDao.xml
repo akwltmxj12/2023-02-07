@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.sycompany.hsp.dao.VaccineIDao">
+ 
+   <!-- 로그인 시 가입한 병원의 모든 정보 조회 -->
+  <select id="getHspInfo" resultType="com.sycompany.hsp.dto.HspInfoDto">
+   	SELECT * 
+   	 FROM hspinfo
+   		WHERE hspid=#{param1}
+  </select>
+ 
+ 	<!-- 백신 입고량 입력 -->
+  <insert id="hspVaccineHold">
+  	INSERT 
+  	INTO Hsp_vaccineInfo
+  		(hspId, vaccineName, vaccineCompany, vaccineRcvDay, vaccineDscDay, vaccineHold) 
+  	VALUES
+  		(#{param1}, #{param2}, #{param3}, #{param4}, #{param5}, #{param6})
+  </insert>
+  
+  <!-- 의료기관 보유 백신 리스트 가져오기 -->
+  <select id="getHspVaccineAllStock" resultType="com.sycompany.hsp.dto.Hsp_vaccineInfoDto">
+   	SELECT * 
+   	 FROM Hsp_vaccineInfo
+   		WHERE hspid=#{param1}
+   		ORDER BY vaccineName ASC
+  </select>
+
+  <!-- 백신명 일치하는 리스트 가져오기 -->
+  <select id="vaccineStockSearch" resultType="com.sycompany.hsp.dto.Hsp_vaccineInfoDto">
+   	SELECT * 
+   	 FROM Hsp_vaccineInfo
+   		WHERE hspid = #{param1}
+   		  AND vaccineName = #{param2}
+   		  ORDER BY vaccineRcvDay ASC
+  </select>  
+  
+  <!-- 조회 없이 입고날짜 순 나열-->
+  <select id="vaccineStockDESC" resultType="com.sycompany.hsp.dto.Hsp_vaccineInfoDto">
+   	SELECT * 
+   	 FROM Hsp_vaccineInfo
+   		WHERE hspid = #{param1}
+   	 ORDER BY vaccineRcvDay DESC
+  </select> 
+  
+    <!-- 조회없이 폐기날짜 순 나열-->
+  <select id="vaccineStockASC" resultType="com.sycompany.hsp.dto.Hsp_vaccineInfoDto">
+   	SELECT * 
+   	 FROM Hsp_vaccineInfo
+   		WHERE hspid = #{param1}
+   	 ORDER BY vaccineDscDay ASC
+  </select> 
+  
+  
+  <!-- 입고날짜 순 나열-->
+  <select id="vaccineStockRangeDESC" resultType="com.sycompany.hsp.dto.Hsp_vaccineInfoDto">
+   	SELECT * 
+   	 FROM Hsp_vaccineInfo
+   		WHERE hspid = #{param1}
+   		  AND vaccineName = #{param2}
+   		  ORDER BY vaccineRcvDay DESC
+  </select> 
+  
+  <!-- 폐기날짜 순 나열-->
+  <select id="vaccineStockRangeASC" resultType="com.sycompany.hsp.dto.Hsp_vaccineInfoDto">
+   	SELECT * 
+   	 FROM Hsp_vaccineInfo
+   		WHERE hspid = #{param1}
+   		  AND vaccineName = #{param2}
+   		  ORDER BY vaccineDscDay ASC
+  </select> 
+  
+  <!-- 의료기관 취급백신 수정 -->
+  <update id="vaccineInfoChange">
+  	UPDATE Hsp_vaccineInfo  
+  	   SET 
+		   vaccineCompany = #{param1}, 
+		   vaccineRcvDay = #{param2}, vaccineDscDay = #{param3}, 
+		   vaccineHold = #{param4}, vaccineUse = #{param5} 
+  	   WHERE
+  	   		 hspId = #{param6} 
+  	   	 AND vaccineName = #{param7} 
+  	   	 AND vaccineCompany = #{param8} 
+  	   	 AND vaccineRcvDay = #{param9} 
+  	   	 AND vaccineDscDay = #{param10} 
+  	   	 AND vaccineHold = #{param11} 
+
+  </update>
+  
+    <!-- 백신삭제 -->
+  <delete id="vaccineInfoDelete">
+  	DELETE 
+  	  FROM Hsp_vaccineInfo  
+  	   WHERE
+  	   		 hspId = #{param1} 
+  	   	 AND vaccineName = #{param2} 
+  	   	 AND vaccineCompany = #{param3} 
+  	   	 AND vaccineRcvDay = #{param4} 
+  	   	 AND vaccineDscDay = #{param5} 
+  	   	 AND vaccineHold = #{param6}
+  
+  </delete>
+ 
+ </mapper>

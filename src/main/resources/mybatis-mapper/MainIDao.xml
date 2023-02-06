@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sycompany.hsp.dao.MainIDao">
+
+<!-- 로그인 아이디 조회 -->
+  <select id="checkIdAndPW" resultType="int">
+   	SELECT COUNT(*) 
+   	FROM hspInfo 
+   		WHERE hspid=#{param1} AND hsppw=#{param2}
+  </select>
+
+<!-- 로그인 시 가입한 병원의 모든 정보 조회 -->
+  <select id="getHspInfo" resultType="com.sycompany.hsp.dto.HspInfoDto">
+   	SELECT * 
+   	 FROM hspinfo
+   		WHERE hspid=#{param1}
+  </select>
+
+  <!-- 오늘 예약된 예방접종 개수 조회 -->
+  <select id="getAppCount" resultType="int">
+   	SELECT COUNT(*)  
+   	FROM APPOINTMENTINFO 
+   		WHERE appDate = #{param1}
+  </select>
+  
+  <!-- 미확인 개수 조회 -->
+  <select id="getAppCheck" resultType="com.sycompany.hsp.dto.AppointmentInfoDto">
+   	SELECT *
+   	FROM APPOINTMENTINFO
+   		WHERE appCk = #{param1} 
+   		AND appdate >= TO_DATE(#{param2},'YYYY-MM-DD')
+  </select>	
+  
+   <!-- 의료기관 보유 백신 리스트 가져오기 -->
+  <select id="getHspVaccineAllStock" resultType="com.sycompany.hsp.dto.Hsp_vaccineInfoDto">
+   	SELECT * 
+   	 FROM Hsp_vaccineInfo
+   		WHERE hspid=#{param1}
+   		ORDER BY vaccineName ASC
+  </select>
+
+</mapper>  

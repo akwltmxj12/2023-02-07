@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.sycompany.hsp.dao.ModifyIDao">
+ 
+<!-- 로그인 시 가입한 병원의 모든 정보 조회 -->
+  <select id="getHspInfo" resultType="com.sycompany.hsp.dto.HspInfoDto">
+   	SELECT * 
+   	 FROM hspinfo
+   		WHERE hspid=#{param1}
+  </select>
+ 
+   <!-- 의료기관의 예약가능시간 조회-->
+  <select id="getHspRunTime" resultType="com.sycompany.hsp.dto.HspdayappDto">
+   	SELECT * 
+   	 FROM hspdayApp
+   		WHERE hspid=#{param1}
+  </select>
+  
+  <!-- 의료기관 정보수정 -->
+  <update id="hspInfoModify">
+  	UPDATE hspInfo  
+  	   SET hspName= #{param2}, hspAddress= #{param3}, hspCrntAdd= #{param4}, 
+  	   	   hspTel= #{param5}, hspDrNum= #{param6}, hspNum= #{param7}, hspLunchSt= #{param8}, hspLunchCl= #{param9}
+  	   WHERE hspId = #{param1} 
+  </update>
+  
+  <!-- 의료기관 예약가능 시간수정 -->
+  <update id="hspAppTimeModify">
+  	UPDATE HspdayApp
+       SET	hspStMon= #{param2}, hspClMon= #{param3}, hspStTue= #{param4}, hspClTue= #{param5}, 
+			hspStWed= #{param6}, hspClWed= #{param7}, hspStThu= #{param8}, hspClThu= #{param9}, 
+			hspStFri= #{param10}, hspClFri= #{param11}, hspStSat= #{param12}, hspClSat= #{param13}, 
+			hspStSun= #{param14}, hspClSun= #{param15}  
+  	 WHERE hspId = #{param1} 
+  </update>
+  
+  <!-- 의료기관 취급백신 수정 -->
+  <update id="hspVaccineModify">
+  	UPDATE hspInfo  
+  	   SET hspVaccineCk = #{param2}
+  	   WHERE hspId = #{param1} 
+  </update>
+  
+
+ 
+ </mapper>
